@@ -6,9 +6,18 @@ import (
 )
 
 func main() {
-	l := list.List{4}
+	l := list.List[int]{}
 	fmt.Println("List created!")
-	fmt.Println(l.GetValue())
-	l.SetValue(2)
-	fmt.Println(l.GetValue())
+	l.Append(2)
+	l.Append(5)
+	l.Print()
+	l.Prepend(1)
+	l.Print()
+	l2 := list.List[int]{}
+	l2.Prepend(3)
+	l2.Print()
+	l2.Prepend(16)
+	l2.Print()
+	fmt.Println(l2.Find(3))
+	fmt.Println(l2.Find(2))
 }
