@@ -1,6 +1,6 @@
 package list
 
-type Node[T any] struct {
+type Node[T comparable] struct {
 	Value T
 	Next  *Node[T]
 }

@@ -3,15 +3,15 @@ package list
 import "fmt"
 
 type List[T comparable] struct {
-	head *Node[T]
+	Head *Node[T]
 }
 
 func (l *List[T]) Append(value T) {
-	if l.head == nil {
-		l.head = &Node[T]{Value: value}
+	if l.Head == nil {
+		l.Head = &Node[T]{Value: value}
 		return
 	}
-	current := l.head
+	current := l.Head
 	for current.Next != nil {
 		current = current.Next
 	}
@@ -19,34 +19,35 @@ func (l *List[T]) Append(value T) {
 }
 
 func (l *List[T]) Prepend(value T) {
-	if l.head == nil {
-		l.head = &Node[T]{Value: value}
+	if l.Head == nil {
+		l.Head = &Node[T]{Value: value}
 		return
 	}
-	new := &Node[T]{Value: value, Next: l.head}
-	l.head = new
+	new := &Node[T]{Value: value, Next: l.Head}
+	l.Head = new
 }
 
-func (l *List[T]) Print() {
-	for current := l.head; current != nil; current = current.Next {
-		fmt.Print(current.Value)
+func (l List[T]) String() string {
+	result := ""
+	for current := l.Head; current != nil; current = current.Next {
+		result += fmt.Sprintf("%v", current.Value)
 		if current.Next != nil {
-			fmt.Print("-")
+			result += "-"
 		}
 	}
-	fmt.Println()
+	return result
 }
 
 func (l *List[T]) Remove(key T) bool {
-	if l.head == nil {
+	if l.Head == nil {
 		return false
 	}
-	if l.head.Value == key {
-		l.head = l.head.Next
+	if l.Head.Value == key {
+		l.Head = l.Head.Next
 		return true
 	}
-	prev := l.head
-	for curr := l.head.Next; curr != nil; curr = curr.Next {
+	prev := l.Head
+	for curr := l.Head.Next; curr != nil; curr = curr.Next {
 		if curr.Value == key {
 			prev.Next = curr.Next
 			return true
@@ -56,8 +57,35 @@ func (l *List[T]) Remove(key T) bool {
 	return false
 }
 
+func (l *List[T]) RemoveAt(indx int) T {
+	if l.Head == nil || l.Size() <= indx {
+		var zero T
+		return zero
+	}
+	if indx == 0 {
+		removedNode := l.Head
+		l.Head = l.Head.Next
+		return removedNode.Value
+	}
+	curr := l.Head
+	for i := 0; i != indx-1; i++ {
+		curr = curr.Next
+	}
+	removedNode := curr.Next
+	curr.Next = curr.Next.Next
+	return removedNode.Value
+}
+
+func (l List[T]) Size() int {
+	size := 0
+	for curr := l.Head; curr != nil; curr = curr.Next {
+		size += 1
+	}
+	return size
+}
+
 func (l List[T]) Find(key T) int {
-	current := l.head
+	current := l.Head
 	for i := 0; current != nil; i++ {
 		if current.Value == key {
 			return i
